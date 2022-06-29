@@ -19,10 +19,11 @@ public class UserController {
     private final UserService service;
 
     @PostMapping(value = "/create", consumes = "application/json", produces = "application/json")
-    public void createUser(@RequestBody DiraUser user) throws ExecutionException, InterruptedException {
+    public DiraUser createUser(@RequestBody DiraUser user) throws ExecutionException, InterruptedException {
         service.saveUser(user);
+        return user;
     }
-    
+
     @GetMapping("/find")
     public ResponseEntity<DiraUser> findById(@RequestParam("user_id") String user_id) throws ExecutionException, InterruptedException {
         for (DiraUser user: service.getUsers()) {
