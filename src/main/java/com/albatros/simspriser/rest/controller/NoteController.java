@@ -8,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -24,19 +22,9 @@ public class NoteController {
     @Autowired
     private final DailyService daily_service;
 
-    private static final ArrayList<DailyNote> dailies = new ArrayList<>();
-
-    @GetMapping(value = "/refresh")
-    public void refreshDaily() throws ExecutionException, InterruptedException {
-        List<DailyNote> all = daily_service.getDailyNotes();
-        Collections.shuffle(all);
-        dailies.clear();
-        dailies.addAll(all.subList(0, 3));
-    }
-
     @GetMapping(value = "/daily/get/all")
-    public List<DailyNote> getDaily() {
-        return dailies;
+    public List<DailyNote> getDaily() throws ExecutionException, InterruptedException {
+        return daily_service.getDailyNotes();
     }
 
     @PostMapping(value = "/create", consumes = "application/json", produces = "application/json")
