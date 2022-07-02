@@ -13,4 +13,8 @@ public class Schedule {
     private String ownerId;
     private List<DiraNote> tasks;
     private long id;
+
+    public void addNote(DiraNote note) {
+        tasks.add(note);
+    }
 }
