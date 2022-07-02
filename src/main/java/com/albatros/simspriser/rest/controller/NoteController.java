@@ -26,6 +26,21 @@ public class NoteController {
         scheduleService.saveSchedule(schedule);
     }
 
+    @GetMapping(value = "/schedule/add")
+    public void addNote(
+            @RequestParam("note_id") long note_id,
+            @RequestParam("user_id") String user_id
+    ) throws ExecutionException, InterruptedException {
+        DiraNote note = service.getNotes().stream().filter(
+                n -> n.getId() == note_id
+        ).findFirst().orElse(null);
+        Schedule schedule = scheduleService.getSchedules().stream().filter(
+                s -> s.getOwnerId().equalsIgnoreCase(user_id)
+        ).findFirst().orElse(null);
+        assert schedule != null;
+        schedule.getTasks().add(note);
+    }
+
     @GetMapping(value = "/schedule/get")
     public Schedule getScheduleById(@RequestParam("owner_id") String user_id) throws ExecutionException, InterruptedException {
         return scheduleService.getSchedules().stream().filter(
