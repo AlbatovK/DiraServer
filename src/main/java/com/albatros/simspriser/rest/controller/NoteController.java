@@ -27,7 +27,7 @@ public class NoteController {
     }
 
     @GetMapping(value = "/schedule/add")
-    public void addNote(
+    public boolean addNote(
             @RequestParam("note_id") long note_id,
             @RequestParam("user_id") String user_id
     ) throws ExecutionException, InterruptedException {
@@ -38,7 +38,9 @@ public class NoteController {
                 s -> s.getOwnerId().equalsIgnoreCase(user_id)
         ).findFirst().orElse(null);
         assert schedule != null;
+        assert note != null;
         schedule.getTasks().add(note);
+        return true;
     }
 
     @GetMapping(value = "/schedule/get")
