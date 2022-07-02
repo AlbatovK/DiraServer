@@ -39,7 +39,7 @@ public class NoteController {
         ).findFirst().orElse(null);
         assert schedule != null;
         assert note != null;
-        schedule.getTasks().add(note);
+        schedule.addNote(note);
         return true;
     }
 
