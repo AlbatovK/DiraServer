@@ -40,6 +40,7 @@ public class NoteController {
         assert schedule != null;
         assert note != null;
         schedule.addNote(note);
+        scheduleService.saveSchedule(schedule);
         return true;
     }
 
