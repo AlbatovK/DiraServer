@@ -1,6 +1,6 @@
 package com.albatros.simspriser.dao;
 
-import com.albatros.simspriser.domain.DailyNote;
+import com.albatros.simspriser.domain.Schedule;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
@@ -12,33 +12,32 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @Component
-public class DailyDao implements DaoInterface<DailyNote> {
+public class ScheduleDao implements DaoInterface<Schedule> {
 
-    private static final String collection_name = "daily";
+    private static final String collection_name = "schedule";
 
     @Override
-    public void save(DailyNote note) throws ExecutionException, InterruptedException {
+    public void save(Schedule schedule) throws ExecutionException, InterruptedException {
         Firestore firestore = FirestoreClient.getFirestore();
-        firestore.collection(collection_name).document(String.valueOf(note.getId())).set(note).get();
+        firestore.collection(collection_name).document(schedule.getOwnerId()).set(schedule).get();
     }
 
     @Override
-    public void delete(DailyNote note) throws ExecutionException, InterruptedException {
+    public void delete(Schedule schedule) throws ExecutionException, InterruptedException {
         Firestore firestore = FirestoreClient.getFirestore();
-        firestore.collection(collection_name).document(String.valueOf(note.getId())).delete().get();
+        firestore.collection(collection_name).document(schedule.getOwnerId()).delete().get();
     }
 
     @Override
-    public List<DailyNote> getAll() throws InterruptedException, ExecutionException {
+    public List<Schedule> getAll() throws InterruptedException, ExecutionException {
         Firestore firestore = FirestoreClient.getFirestore();
-        List<DailyNote> res = new ArrayList<>();
+        List<Schedule> res = new ArrayList<>();
         Iterable<DocumentReference> refs = firestore.collection(collection_name).listDocuments();
         for (DocumentReference ref : refs) {
             DocumentSnapshot doc = ref.get().get();
-            DailyNote item = doc.toObject(DailyNote.class);
+            Schedule item = doc.toObject(Schedule.class);
             res.add(item);
         }
         return res;
     }
 }
-

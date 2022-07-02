@@ -4,12 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class DailyNote {
-    private String title;
-    private String description;
-    private int givenScore;
+@NoArgsConstructor
+public class Schedule {
+    private String ownerId;
+    private List<DiraNote> tasks;
     private long id;
 }

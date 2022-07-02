@@ -1,16 +1,15 @@
 package com.albatros.simspriser.rest.controller;
 
-import com.albatros.simspriser.domain.DailyNote;
 import com.albatros.simspriser.domain.DiraNote;
-import com.albatros.simspriser.service.DailyService;
+import com.albatros.simspriser.domain.Schedule;
 import com.albatros.simspriser.service.NoteService;
+import com.albatros.simspriser.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 
 @RequestMapping("/note")
 @RestController
@@ -20,11 +19,18 @@ public class NoteController {
     @Autowired
     private final NoteService service;
     @Autowired
-    private final DailyService daily_service;
+    private final ScheduleService scheduleService;
 
-    @GetMapping(value = "/daily/get/all")
-    public List<DailyNote> getDaily() throws ExecutionException, InterruptedException {
-        return daily_service.getDailyNotes();
+    @PostMapping(value = "/schedule/create", consumes = "application/json", produces = "application/json")
+    public void createSchedule(@RequestBody Schedule schedule) throws ExecutionException, InterruptedException {
+        scheduleService.saveSchedule(schedule);
+    }
+
+    @GetMapping(value = "/schedule/get")
+    public Schedule getScheduleById(@RequestParam("owner_id") String user_id) throws ExecutionException, InterruptedException {
+        return scheduleService.getSchedules().stream().filter(
+                s -> s.getOwnerId().equalsIgnoreCase(user_id)
+        ).findFirst().orElse(null);
     }
 
     @PostMapping(value = "/create", consumes = "application/json", produces = "application/json")
@@ -33,9 +39,7 @@ public class NoteController {
     }
 
     @GetMapping("/get/all")
-    public List<DiraNote> getAll(@RequestParam("user_id") String user_id) throws ExecutionException, InterruptedException {
-        return service.getNotes().stream().filter(
-                note -> note.getOwnerId().equalsIgnoreCase(user_id)
-        ).collect(Collectors.toList());
+    public List<DiraNote> getAll() throws ExecutionException, InterruptedException {
+        return service.getNotes();
     }
 }
