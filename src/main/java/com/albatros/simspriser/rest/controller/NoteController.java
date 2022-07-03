@@ -45,7 +45,7 @@ public class NoteController {
         return true;
     }
 
-    @GetMapping(value = "note/refresh")
+    @GetMapping(value = "/refresh")
     public void refresh() throws ExecutionException, InterruptedException {
         List<Schedule> schedules = scheduleService.getSchedules();
         for (Schedule s : schedules) {
