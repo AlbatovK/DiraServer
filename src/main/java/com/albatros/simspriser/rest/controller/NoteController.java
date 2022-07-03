@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -42,6 +43,15 @@ public class NoteController {
         schedule.addNote(note);
         scheduleService.saveSchedule(schedule);
         return true;
+    }
+
+    @GetMapping(value = "note/refresh")
+    public void refresh() throws ExecutionException, InterruptedException {
+        List<Schedule> schedules = scheduleService.getSchedules();
+        for (Schedule s : schedules) {
+            s.setTasks(new ArrayList<>());
+            scheduleService.saveSchedule(s);
+        }
     }
 
     @GetMapping(value = "/schedule/get")
