@@ -36,14 +36,14 @@ public class UserController {
         };
 
         users.stream()
-                .filter(u -> u.getLeague() == 1)
-                .sorted(Comparator.comparingInt(DiraUser::getScoreOfWeek))
+                .filter(u -> u.getLeague() == 2)
+                .sorted(Comparator.comparingInt(DiraUser::getScoreOfWeek).reversed())
                 .limit(1)
                 .forEach(leagueIncreaseConsumer);
 
         users.stream()
-                .filter(u -> u.getLeague() == 2)
-                .sorted(Comparator.comparingInt(DiraUser::getScoreOfWeek))
+                .filter(u -> u.getLeague() == 1)
+                .sorted(Comparator.comparingInt(DiraUser::getScoreOfWeek).reversed())
                 .limit(1)
                 .forEach(leagueIncreaseConsumer);
     }
