@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 @RequestMapping("/user")
 @RestController
@@ -26,26 +27,33 @@ public class UserController {
         return user;
     }
 
+    @GetMapping(value = "/league/get/all")
+    public List<DiraUser> getUsersByLeague(@RequestParam("league") int league) throws ExecutionException, InterruptedException {
+        return service.getUsers().stream().filter(u -> u.getLeague() == league).collect(Collectors.toList());
+    }
+
     @GetMapping(value = "/refresh/leagues")
     public void refreshLeagues() throws ExecutionException, InterruptedException {
         List<DiraUser> users = service.getUsers();
 
         Consumer<DiraUser> leagueIncreaseConsumer = u -> {
             u.setLeague(u.getLeague() + 1);
-            try { service.saveUser(u); } catch (ExecutionException | InterruptedException ignored) { }
+            try {
+                service.saveUser(u);
+            } catch (ExecutionException | InterruptedException ignored) {
+            }
         };
 
-        users.stream()
-                .filter(u -> u.getLeague() == 2)
-                .sorted(Comparator.comparingInt(DiraUser::getScoreOfWeek).reversed())
-                .limit(1)
-                .forEach(leagueIncreaseConsumer);
-
-        users.stream()
-                .filter(u -> u.getLeague() == 1)
-                .sorted(Comparator.comparingInt(DiraUser::getScoreOfWeek).reversed())
-                .limit(1)
-                .forEach(leagueIncreaseConsumer);
+        int i = 4;
+        while (i > 0) {
+            int finalI = i;
+            users.stream()
+                    .filter(u -> u.getLeague() == finalI)
+                    .sorted(Comparator.comparingInt(DiraUser::getScoreOfWeek).reversed())
+                    .limit(1)
+                    .forEach(leagueIncreaseConsumer);
+            i--;
+        }
     }
 
     @GetMapping(value = "/refresh/day")
