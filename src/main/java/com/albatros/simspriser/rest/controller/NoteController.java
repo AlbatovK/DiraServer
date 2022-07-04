@@ -27,6 +27,24 @@ public class NoteController {
         scheduleService.saveSchedule(schedule);
     }
 
+    @PostMapping("/schedule/add/many")
+    public void addNotes(@RequestBody List<Integer> note_ids,
+                         @RequestParam("user_id") String user_id) throws ExecutionException, InterruptedException {
+
+        Schedule schedule = scheduleService.getSchedules().stream().filter(
+                s -> s.getOwnerId().equalsIgnoreCase(user_id)
+        ).findFirst().orElse(null);
+        assert schedule != null;
+
+        for (Integer id : note_ids) {
+            DiraNote note = service.getNotes().stream().filter(
+                    n -> n.getId() == id
+            ).findFirst().orElse(null);
+            schedule.addNote(note);
+            scheduleService.saveSchedule(schedule);
+        }
+    }
+
     @GetMapping(value = "/schedule/add")
     public boolean addNote(
             @RequestParam("note_id") long note_id,
