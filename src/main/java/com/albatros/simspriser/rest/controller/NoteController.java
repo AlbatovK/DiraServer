@@ -33,27 +33,19 @@ public class NoteController {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    static class NoteIdsList {
-        private List<Long> noteIds;
+    static class NoteList {
+        private List<DiraNote> notes;
     }
 
     @PostMapping(value = "/schedule/add/many", consumes = "application/json", produces = "application/json")
-    public void addNotes(@RequestBody NoteIdsList note_ids,
+    public void addNotes(@RequestBody NoteList notes,
                          @RequestParam("user_id") String user_id) throws ExecutionException, InterruptedException {
 
         Schedule schedule = scheduleService.getSchedules().stream().filter(
                 s -> s.getOwnerId().equalsIgnoreCase(user_id)
         ).findFirst().orElse(null);
         assert schedule != null;
-        List<DiraNote> notes = service.getNotes();
-
-        for (Long id : note_ids.getNoteIds()) {
-            DiraNote note = notes.stream().filter(
-                    n -> n.getId() == id
-            ).findFirst().orElse(null);
-            schedule.addNote(note);
-        }
-
+        notes.getNotes().forEach(schedule::addNote);
         scheduleService.saveSchedule(schedule);
     }
 
