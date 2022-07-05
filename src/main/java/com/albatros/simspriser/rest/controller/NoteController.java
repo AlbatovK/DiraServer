@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.Stream;
 
 @RequestMapping("/note")
 @RestController
@@ -47,10 +46,9 @@ public class NoteController {
         ).findFirst().orElse(null);
         assert schedule != null;
         List<DiraNote> notes = service.getNotes();
-        Stream<DiraNote> stream = notes.stream();
 
         for (Long id : note_ids.getNoteIds()) {
-            DiraNote note = stream.filter(
+            DiraNote note = notes.stream().filter(
                     n -> n.getId() == id
             ).findFirst().orElse(null);
             schedule.addNote(note);
