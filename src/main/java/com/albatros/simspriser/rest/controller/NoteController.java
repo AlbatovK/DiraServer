@@ -4,6 +4,9 @@ import com.albatros.simspriser.domain.DiraNote;
 import com.albatros.simspriser.domain.Schedule;
 import com.albatros.simspriser.service.NoteService;
 import com.albatros.simspriser.service.ScheduleService;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +30,15 @@ public class NoteController {
         scheduleService.saveSchedule(schedule);
     }
 
-    @PostMapping("/schedule/add/many")
-    public void addNotes(@RequestBody List<Integer> note_ids,
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    static class NoteIdsList {
+        private List<Long> noteIds;
+    }
+
+    @PostMapping(value = "/schedule/add/many", consumes = "application/json", produces = "application/json")
+    public void addNotes(@RequestBody NoteIdsList note_ids,
                          @RequestParam("user_id") String user_id) throws ExecutionException, InterruptedException {
 
         Schedule schedule = scheduleService.getSchedules().stream().filter(
@@ -36,13 +46,14 @@ public class NoteController {
         ).findFirst().orElse(null);
         assert schedule != null;
 
-        for (Integer id : note_ids) {
+        for (Long id : note_ids.getNoteIds()) {
             DiraNote note = service.getNotes().stream().filter(
                     n -> n.getId() == id
             ).findFirst().orElse(null);
             schedule.addNote(note);
-            scheduleService.saveSchedule(schedule);
         }
+
+        scheduleService.saveSchedule(schedule);
     }
 
     @GetMapping(value = "/schedule/add")
