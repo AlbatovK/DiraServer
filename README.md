@@ -5,9 +5,9 @@
 * Технические характеристики
   * Spring Boot 2.6.6 - Основной веб фреймворк  
   * Spring MVC - структура проекта соответствует стандатной модели Spring MVC (Модель, слой репозиториев, слой сервисов, слой контроллеров)
-  * Lombok
   * Swagger2 and SpringFox - автоматическое создание документации [(ссылка на документацию)](https://secret-escarpment-88160.herokuapp.com/swagger-ui.html)
   * Google Firebase Firestore - серверная документориентированная NoSQL база данный
+  * Lombok
 
 # Документация API
 ![](https://github.com/AlbatovK/DiraServer/blob/master/assets/ex5.png?raw=true)       | ![](https://github.com/AlbatovK/DiraServer/blob/master/assets/ex1.png?raw=true)       |
