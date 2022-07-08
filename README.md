@@ -7,3 +7,11 @@
   * Lombok
   * Swagger2 and SpringFox - автоматическое создание документации 
   * Google Firebase Firestore - серверная документориентированная NoSQL база данный
+
+
+# Документация API
+![](https://github.com/AlbatovK/DiraServer/blob/master/assets/ex4.png?raw=true)       | ![](https://github.com/AlbatovK/DiraServer/blob/master/assets/ex1.png?raw=true)       |
+| -------------- | -------------- |
+| ![](https://github.com/AlbatovK/DiraServer/blob/master/assets/ex2.png?raw=true)   | ![](https://github.com/AlbatovK/DiraServer/blob/master/assets/ex3.png?raw=true)
+
+
