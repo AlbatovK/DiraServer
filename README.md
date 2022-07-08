@@ -4,5 +4,6 @@
 Ссылка на [приложение-клиент](https://github.com/AlbatovK/Dira) 
 * Технические характеристики
   * Spring Boot 2.6.6 - Основной веб фреймворк  
+  * Lombok
   * Swagger2 and SpringFox - автоматическое создание документации 
   * Google Firebase Firestore - серверная документориентированная NoSQL база данный
