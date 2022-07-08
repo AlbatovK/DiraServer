@@ -4,14 +4,12 @@
 Ссылка на [приложение-клиент](https://github.com/AlbatovK/Dira) 
 * Технические характеристики
   * Spring Boot 2.6.6 - Основной веб фреймворк  
+  * Spring MVC - структура проекта соответствует стандатной модели Spring MVC (Модель, слой репозиториев, слой сервисов, слой контроллеров)
   * Lombok
-  * Swagger2 and SpringFox - автоматическое создание документации 
+  * Swagger2 and SpringFox - автоматическое создание документации [(ссылка на документацию)](https://secret-escarpment-88160.herokuapp.com/swagger-ui.html)
   * Google Firebase Firestore - серверная документориентированная NoSQL база данный
 
-
 # Документация API
-![](https://github.com/AlbatovK/DiraServer/blob/master/assets/ex4.png?raw=true)       | ![](https://github.com/AlbatovK/DiraServer/blob/master/assets/ex1.png?raw=true)       |
+![](https://github.com/AlbatovK/DiraServer/blob/master/assets/ex5.png?raw=true)       | ![](https://github.com/AlbatovK/DiraServer/blob/master/assets/ex1.png?raw=true)       |
 | -------------- | -------------- |
 | ![](https://github.com/AlbatovK/DiraServer/blob/master/assets/ex2.png?raw=true)   | ![](https://github.com/AlbatovK/DiraServer/blob/master/assets/ex3.png?raw=true)
-
-
