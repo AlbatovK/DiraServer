@@ -4,7 +4,7 @@
 
 Официальный сервер для приложения Directa!
 
-Контрибуторы: [Артём](https://github.com/AkkaRun11), [Асхат](https://github.com/CondInPunz)
+Контрибуторы: [Артём](https://github.com/AkkaRun11), [Асхат](https://github.com/CondInPunz).
 
 Ссылка на [приложение-клиент](https://github.com/AlbatovK/Dira).
 * Технические характеристики:
