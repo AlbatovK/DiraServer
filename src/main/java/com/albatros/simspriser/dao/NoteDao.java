@@ -1,17 +1,17 @@
 package com.albatros.simspriser.dao;
 
 import com.albatros.simspriser.domain.DiraNote;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @Component
+@Service
 public class NoteDao implements DaoInterface<DiraNote> {
 
     private static final String collection_name = "notes";
@@ -26,6 +26,26 @@ public class NoteDao implements DaoInterface<DiraNote> {
     public void delete(DiraNote note) throws ExecutionException, InterruptedException {
         Firestore firestore = FirestoreClient.getFirestore();
         firestore.collection(collection_name).document(String.valueOf(note.getId())).delete().get();
+    }
+
+    public DiraNote findById(long id) throws ExecutionException, InterruptedException {
+        Firestore firestore = FirestoreClient.getFirestore();
+        Query query = firestore.collection(collection_name).whereEqualTo("id", id);
+        List<QueryDocumentSnapshot> foundDocs = query.get().get().getDocuments();
+        QueryDocumentSnapshot snapshot = foundDocs.stream().findFirst().orElse(null);
+        return snapshot == null ? null : snapshot.toObject(DiraNote.class);
+    }
+
+    public List<DiraNote> findInIdList(List<Long> idList) throws ExecutionException, InterruptedException {
+        Firestore firestore = FirestoreClient.getFirestore();
+        List<QueryDocumentSnapshot> foundDocs = firestore.collection(collection_name)
+                .whereIn("id", idList).get().get().getDocuments();
+        List<DiraNote> res = new ArrayList<>();
+        for (QueryDocumentSnapshot snapshot : foundDocs) {
+            DiraNote note = snapshot.toObject(DiraNote.class);
+            res.add(note);
+        }
+        return res;
     }
 
     @Override

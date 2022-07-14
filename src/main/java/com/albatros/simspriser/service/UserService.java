@@ -24,6 +24,10 @@ public class UserService {
         dao.delete(user);
     }
 
+    public List<DiraUser> getAllPaged(int limit) throws ExecutionException, InterruptedException {
+        return dao.getAllPaged(limit);
+    }
+
     public List<DiraUser> getUsers() throws InterruptedException, ExecutionException {
         return dao.getAll();
     }

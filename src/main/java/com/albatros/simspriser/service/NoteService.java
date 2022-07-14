@@ -24,6 +24,14 @@ public class NoteService {
         dao.delete(note);
     }
 
+    public List<DiraNote> findInIdList(List<Long> id) throws ExecutionException, InterruptedException {
+        return dao.findInIdList(id);
+    }
+
+    public DiraNote findNoteById(long id) throws ExecutionException, InterruptedException {
+        return dao.findById(id);
+    }
+
     public List<DiraNote> getNotes() throws InterruptedException, ExecutionException {
         return dao.getAll();
     }

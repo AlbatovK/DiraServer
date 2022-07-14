@@ -10,4 +10,5 @@ public interface DaoInterface<T> {
     void save(T obj) throws InterruptedException, ExecutionException;
 
     void delete(T obj) throws InterruptedException, ExecutionException;
+
 }

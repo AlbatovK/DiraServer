@@ -10,11 +10,16 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Schedule {
+
     private String ownerId;
     private List<DiraNote> tasks;
     private long id;
 
-    public void addNote(DiraNote note) {
+    public void clearTasks() {
+        tasks.clear();
+    }
+
+    public void addTask(DiraNote note) {
         tasks.add(note);
     }
 }

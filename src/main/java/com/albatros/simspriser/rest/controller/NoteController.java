@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -21,75 +20,56 @@ import java.util.concurrent.ExecutionException;
 public class NoteController {
 
     @Autowired
-    private final NoteService service;
+    private final NoteService noteService;
+
     @Autowired
     private final ScheduleService scheduleService;
 
     @PostMapping(value = "/schedule/create", consumes = "application/json", produces = "application/json")
-    public void createSchedule(@RequestBody Schedule schedule) throws ExecutionException, InterruptedException {
+    public void saveSchedule(@RequestBody Schedule schedule) throws ExecutionException, InterruptedException {
         scheduleService.saveSchedule(schedule);
     }
 
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    static class NoteList {
-        private List<DiraNote> notes;
+    static class NoteIdsList {
+        private List<Long> notes;
     }
 
     @PostMapping(value = "/schedule/add/many", consumes = "application/json", produces = "application/json")
-    public void addNotes(@RequestBody NoteList notes,
-                         @RequestParam("user_id") String user_id) throws ExecutionException, InterruptedException {
-
-        Schedule schedule = scheduleService.getSchedules().stream().filter(
-                s -> s.getOwnerId().equalsIgnoreCase(user_id)
-        ).findFirst().orElse(null);
-        assert schedule != null;
-        notes.getNotes().forEach(schedule::addNote);
-        scheduleService.saveSchedule(schedule);
-    }
-
-    @GetMapping(value = "/schedule/add")
-    public boolean addNote(
-            @RequestParam("note_id") long note_id,
+    public void addNotes(
+            @RequestBody NoteIdsList notesIdList,
             @RequestParam("user_id") String user_id
     ) throws ExecutionException, InterruptedException {
-        DiraNote note = service.getNotes().stream().filter(
-                n -> n.getId() == note_id
-        ).findFirst().orElse(null);
-        Schedule schedule = scheduleService.getSchedules().stream().filter(
-                s -> s.getOwnerId().equalsIgnoreCase(user_id)
-        ).findFirst().orElse(null);
+        Schedule schedule = scheduleService.findScheduleByOwnerId(user_id);
         assert schedule != null;
-        assert note != null;
-        schedule.addNote(note);
-        scheduleService.saveSchedule(schedule);
-        return true;
+        List<DiraNote> notes = noteService.findInIdList(notesIdList.getNotes());
+        notes.forEach(schedule::addTask);
+        scheduleService.updateSchedule(schedule);
     }
 
     @GetMapping(value = "/refresh")
     public void refresh() throws ExecutionException, InterruptedException {
         List<Schedule> schedules = scheduleService.getSchedules();
-        for (Schedule s : schedules) {
-            s.setTasks(new ArrayList<>());
-            scheduleService.saveSchedule(s);
+        for (Schedule schedule : schedules) {
+            schedule.clearTasks();
+            scheduleService.updateSchedule(schedule);
         }
     }
 
     @GetMapping(value = "/schedule/get")
     public Schedule getScheduleById(@RequestParam("owner_id") String user_id) throws ExecutionException, InterruptedException {
-        return scheduleService.getSchedules().stream().filter(
-                s -> s.getOwnerId().equalsIgnoreCase(user_id)
-        ).findFirst().orElse(null);
+        return scheduleService.findScheduleByOwnerId(user_id);
     }
 
     @PostMapping(value = "/create", consumes = "application/json", produces = "application/json")
     public void createNote(@RequestBody DiraNote note) throws ExecutionException, InterruptedException {
-        service.saveNote(note);
+        noteService.saveNote(note);
     }
 
     @GetMapping("/get/all")
     public List<DiraNote> getAll() throws ExecutionException, InterruptedException {
-        return service.getNotes();
+        return noteService.getNotes();
     }
 }

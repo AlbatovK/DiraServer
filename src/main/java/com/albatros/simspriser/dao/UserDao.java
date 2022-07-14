@@ -4,6 +4,7 @@ import com.albatros.simspriser.domain.DiraUser;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +27,18 @@ public class UserDao implements DaoInterface<DiraUser> {
     public void delete(DiraUser user) throws ExecutionException, InterruptedException {
         Firestore firestore = FirestoreClient.getFirestore();
         firestore.collection(collection_name).document(user.getTokenId()).delete().get();
+    }
+
+    public List<DiraUser> getAllPaged(int limit) throws ExecutionException, InterruptedException {
+        Firestore firestore = FirestoreClient.getFirestore();
+        List<QueryDocumentSnapshot> docs = firestore.collection(collection_name).orderBy("score")
+                .limit(limit).get().get().getDocuments();
+        List<DiraUser> res = new ArrayList<>();
+        for (QueryDocumentSnapshot snapshot : docs) {
+            DiraUser user = snapshot.toObject(DiraUser.class);
+            res.add(user);
+        }
+        return res;
     }
 
     @Override

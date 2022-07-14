@@ -20,6 +20,14 @@ public class ScheduleService {
         dao.save(schedule);
     }
 
+    public Schedule findScheduleByOwnerId(String ownerId) throws ExecutionException, InterruptedException {
+        return dao.findByOwnerId(ownerId);
+    }
+
+    public void updateSchedule(Schedule schedule) throws ExecutionException, InterruptedException {
+        dao.updateScheduleNoteList(schedule);
+    }
+
     public void deleteSchedule(Schedule schedule) throws ExecutionException, InterruptedException {
         dao.delete(schedule);
     }
