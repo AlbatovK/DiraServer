@@ -4,14 +4,11 @@ import com.albatros.simspriser.domain.DiraUser;
 import com.albatros.simspriser.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 @RequestMapping("/user")
 @RestController
@@ -29,7 +26,7 @@ public class UserController {
 
     @GetMapping(value = "/league/get/all")
     public List<DiraUser> getUsersByLeague(@RequestParam("league") int league) throws ExecutionException, InterruptedException {
-        return service.getUsers().stream().filter(u -> u.getLeague() == league).collect(Collectors.toList());
+        return service.getUsersByLeague(league);
     }
 
     @GetMapping(value = "/refresh/leagues")
@@ -46,10 +43,7 @@ public class UserController {
 
         int i = 4;
         while (i > 0) {
-            int finalI = i;
-            users.stream()
-                    .filter(u -> u.getLeague() == finalI)
-                    .sorted(Comparator.comparingInt(DiraUser::getScoreOfWeek).reversed())
+            service.getUsersByLeague(i).stream()
                     .limit(1)
                     .forEach(leagueIncreaseConsumer);
             i--;
@@ -75,17 +69,12 @@ public class UserController {
     }
 
     @GetMapping("/find")
-    public ResponseEntity<DiraUser> findById(@RequestParam("user_id") String user_id) throws ExecutionException, InterruptedException {
-        for (DiraUser user : service.getUsers()) {
-            if (user.getTokenId().equalsIgnoreCase(user_id)) {
-                return ResponseEntity.ok(user);
-            }
-        }
-        return ResponseEntity.notFound().build();
+    public DiraUser findById(@RequestParam("user_id") String user_id) throws ExecutionException, InterruptedException {
+        return service.getUserById(user_id);
     }
 
     @GetMapping("/get/all")
     public List<DiraUser> getAll() throws ExecutionException, InterruptedException {
-        return service.getAllPaged(10);
+        return service.getUsers();
     }
 }

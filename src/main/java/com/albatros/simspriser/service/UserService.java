@@ -24,8 +24,16 @@ public class UserService {
         dao.delete(user);
     }
 
-    public List<DiraUser> getAllPaged(int limit) throws ExecutionException, InterruptedException {
-        return dao.getAllPaged(limit);
+    public List<DiraUser> getUsersByLeague(int league) throws ExecutionException, InterruptedException {
+        return dao.getUsersByLeague(league);
+    }
+
+    public DiraUser getUserById(String id) throws ExecutionException, InterruptedException {
+        return dao.findById(id);
+    }
+
+    public List<DiraUser> getAllPaged(int offset, int size) throws ExecutionException, InterruptedException {
+        return dao.getAllPaged(offset, size);
     }
 
     public List<DiraUser> getUsers() throws InterruptedException, ExecutionException {

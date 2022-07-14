@@ -1,16 +1,15 @@
 package com.albatros.simspriser.dao;
 
 import com.albatros.simspriser.domain.DiraUser;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 @Component
 public class UserDao implements DaoInterface<DiraUser> {
@@ -19,20 +18,33 @@ public class UserDao implements DaoInterface<DiraUser> {
 
     @Override
     public void save(DiraUser user) throws ExecutionException, InterruptedException {
-        Firestore firestore = FirestoreClient.getFirestore();
-        firestore.collection(collection_name).document(user.getTokenId()).set(user).get();
+        FirestoreClient.getFirestore().collection(collection_name).document(user.getTokenId()).set(user).get();
     }
 
     @Override
     public void delete(DiraUser user) throws ExecutionException, InterruptedException {
-        Firestore firestore = FirestoreClient.getFirestore();
-        firestore.collection(collection_name).document(user.getTokenId()).delete().get();
+        FirestoreClient.getFirestore().collection(collection_name).document(user.getTokenId()).delete().get();
     }
 
-    public List<DiraUser> getAllPaged(int limit) throws ExecutionException, InterruptedException {
+    public List<DiraUser> getUsersByLeague(int league) throws ExecutionException, InterruptedException {
+        return FirestoreClient.getFirestore().collection(collection_name).whereEqualTo("league", league)
+                .get().get().getDocuments().stream()
+                .map(s -> s.toObject(DiraUser.class))
+                .sorted(Comparator.comparingInt(DiraUser::getScoreOfWeek).reversed())
+                .collect(Collectors.toList());
+    }
+
+    public DiraUser findById(String id) throws ExecutionException, InterruptedException {
         Firestore firestore = FirestoreClient.getFirestore();
-        List<QueryDocumentSnapshot> docs = firestore.collection(collection_name).orderBy("score")
-                .limit(limit).get().get().getDocuments();
+        Query query = firestore.collection(collection_name).whereEqualTo("tokenId", id);
+        List<QueryDocumentSnapshot> foundDocs = query.get().get().getDocuments();
+        QueryDocumentSnapshot snapshot = foundDocs.stream().findFirst().orElse(null);
+        return snapshot == null ? null : snapshot.toObject(DiraUser.class);
+    }
+
+    public List<DiraUser> getAllPaged(int offset, int size) throws ExecutionException, InterruptedException {
+        List<QueryDocumentSnapshot> docs = FirestoreClient.getFirestore().collection(collection_name)
+                .orderBy("score").offset(offset).limit(size).get().get().getDocuments();
         List<DiraUser> res = new ArrayList<>();
         for (QueryDocumentSnapshot snapshot : docs) {
             DiraUser user = snapshot.toObject(DiraUser.class);
