@@ -31,21 +31,15 @@ public class UserController {
 
     @GetMapping(value = "/refresh/leagues")
     public void refreshLeagues() throws ExecutionException, InterruptedException {
-        List<DiraUser> users = service.getUsers();
 
         Consumer<DiraUser> leagueIncreaseConsumer = u -> {
             u.setLeague(u.getLeague() + 1);
-            try {
-                service.saveUser(u);
-            } catch (ExecutionException | InterruptedException ignored) {
-            }
+            try { service.saveUser(u); } catch (ExecutionException | InterruptedException ignored) { }
         };
 
         int i = 4;
         while (i > 0) {
-            service.getUsersByLeague(i).stream()
-                    .limit(1)
-                    .forEach(leagueIncreaseConsumer);
+            service.getUsersByLeague(i).stream().limit(1).forEach(leagueIncreaseConsumer);
             i--;
         }
     }

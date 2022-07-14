@@ -15,11 +15,15 @@ public class Schedule {
     private List<DiraNote> tasks;
     private long id;
 
-    public void clearTasks() {
-        tasks.clear();
+    public void addTaskList(List<DiraNote> notes) {
+        tasks.addAll(notes);
     }
 
     public void addTask(DiraNote note) {
         tasks.add(note);
+    }
+
+    public void clearTasks() {
+        tasks.clear();
     }
 }
