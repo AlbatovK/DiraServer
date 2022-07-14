@@ -86,6 +86,6 @@ public class UserController {
 
     @GetMapping("/get/all")
     public List<DiraUser> getAll() throws ExecutionException, InterruptedException {
-        return service.getUsers();
+        return service.getAllPaged(10);
     }
 }
