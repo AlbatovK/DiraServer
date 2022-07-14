@@ -54,8 +54,7 @@ public class UserController {
     public void refreshDay() throws ExecutionException, InterruptedException {
         List<DiraUser> users = service.getUsers();
         for (DiraUser user : users) {
-            user.setScoreOfDay(0);
-            service.saveUser(user);
+            service.clearUserDayScore(user);
         }
     }
 
@@ -63,8 +62,7 @@ public class UserController {
     public void refreshWeek() throws ExecutionException, InterruptedException {
         List<DiraUser> users = service.getUsers();
         for (DiraUser user : users) {
-            user.setScoreOfWeek(0);
-            service.saveUser(user);
+            service.clearUserWeekScore(user);
         }
     }
 

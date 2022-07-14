@@ -36,6 +36,14 @@ public class UserService {
         return dao.getAllPaged(limit);
     }
 
+    public void clearUserDayScore(DiraUser user) throws ExecutionException, InterruptedException {
+        dao.clearUserDayScore(user);
+    }
+
+    public void clearUserWeekScore(DiraUser user) throws ExecutionException, InterruptedException {
+        dao.clearUserWeekScore(user);
+    }
+
     public List<DiraUser> getUsers() throws InterruptedException, ExecutionException {
         return dao.getAll();
     }

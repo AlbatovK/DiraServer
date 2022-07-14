@@ -22,6 +22,16 @@ public class UserDao implements DaoInterface<DiraUser> {
                 .document(user.getTokenId()).set(user).get();
     }
 
+    public void clearUserDayScore(DiraUser user) throws ExecutionException, InterruptedException {
+        FirestoreClient.getFirestore().collection(collection_name).document(user.getTokenId())
+                .update("scoreOfDay", 0).get();
+    }
+
+    public void clearUserWeekScore(DiraUser user) throws ExecutionException, InterruptedException {
+        FirestoreClient.getFirestore().collection(collection_name).document(user.getTokenId())
+                .update("scoreOfWeek", 0).get();
+    }
+
     @Override
     public void delete(DiraUser user) throws ExecutionException, InterruptedException {
         FirestoreClient.getFirestore().collection(collection_name)

@@ -43,6 +43,7 @@ public class NoteController {
             @RequestParam("user_id") String user_id
     ) throws ExecutionException, InterruptedException {
         Schedule schedule = scheduleService.findScheduleByOwnerId(user_id);
+        assert notesIdList != null;
         assert schedule != null;
         List<DiraNote> notes = noteService.findInIdList(notesIdList.getNotes());
         notes.forEach(schedule::addTask);
