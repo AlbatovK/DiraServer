@@ -1,7 +1,8 @@
 /.idea/
-
 /target/
 
 *.iml
+*.json
 
-service_account.json
+mvnw
+mvnw.cmd
