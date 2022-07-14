@@ -4,6 +4,8 @@ import com.albatros.simspriser.dao.UserDao;
 import com.albatros.simspriser.domain.DiraUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

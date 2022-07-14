@@ -1,7 +1,10 @@
 package com.albatros.simspriser.dao;
 
 import com.albatros.simspriser.domain.DiraNote;
-import com.google.cloud.firestore.*;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.Query;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -40,6 +43,17 @@ public class NoteDao implements DaoInterface<DiraNote> {
                 .whereIn("id", idList).get().get().getDocuments();
         List<DiraNote> res = new ArrayList<>();
         for (QueryDocumentSnapshot snapshot : foundDocs) {
+            DiraNote note = snapshot.toObject(DiraNote.class);
+            res.add(note);
+        }
+        return res;
+    }
+
+    public List<DiraNote> getAllPaged(int limit) throws ExecutionException, InterruptedException {
+        List<QueryDocumentSnapshot> docs = FirestoreClient.getFirestore()
+                .collection(collection_name).limit(limit).get().get().getDocuments();
+        List<DiraNote> res = new ArrayList<>();
+        for (QueryDocumentSnapshot snapshot : docs) {
             DiraNote note = snapshot.toObject(DiraNote.class);
             res.add(note);
         }

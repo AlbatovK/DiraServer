@@ -56,7 +56,7 @@ public class UserDao implements DaoInterface<DiraUser> {
 
     public List<DiraUser> getAllPaged(int limit) throws ExecutionException, InterruptedException {
         List<QueryDocumentSnapshot> docs = FirestoreClient.getFirestore().collection(collection_name)
-                .orderBy("score").limit(limit).get().get().getDocuments();
+                .orderBy("score", Query.Direction.DESCENDING).limit(limit).get().get().getDocuments();
         List<DiraUser> res = new ArrayList<>();
         for (QueryDocumentSnapshot snapshot : docs) {
             DiraUser user = snapshot.toObject(DiraUser.class);

@@ -9,10 +9,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 @RequestMapping("/note")
 @RestController
@@ -60,6 +62,15 @@ public class NoteController {
     @GetMapping(value = "/schedule/get")
     public Schedule getScheduleById(@RequestParam("owner_id") String user_id) throws ExecutionException, InterruptedException {
         return scheduleService.findScheduleByOwnerId(user_id);
+    }
+
+    @GetMapping("/get")
+    public List<DiraNote> getPaged(
+            @RequestParam("from") int from,
+            @RequestParam("to") int to
+    ) throws ExecutionException, InterruptedException {
+        List<DiraNote> all = noteService.getAllPaged(to);
+        return all.stream().skip(from).collect(Collectors.toList());
     }
 
     @PostMapping(value = "/create", consumes = "application/json", produces = "application/json")

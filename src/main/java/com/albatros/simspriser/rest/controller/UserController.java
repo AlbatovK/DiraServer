@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 @RequestMapping("/user")
 @RestController
@@ -65,8 +66,17 @@ public class UserController {
         return service.getUserById(user_id);
     }
 
+    @GetMapping("/get")
+    public List<DiraUser> getPaged(
+            @RequestParam("from") int from,
+            @RequestParam("to") int to
+    ) throws ExecutionException, InterruptedException {
+        List<DiraUser> all = service.getAllPaged(to);
+        return all.stream().skip(from).collect(Collectors.toList());
+    }
+
     @GetMapping("/get/all")
     public List<DiraUser> getAll() throws ExecutionException, InterruptedException {
-        return service.getAllPaged(10);
+        return service.getAllPaged(100);
     }
 }
