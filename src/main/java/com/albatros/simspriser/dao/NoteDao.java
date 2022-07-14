@@ -18,27 +18,25 @@ public class NoteDao implements DaoInterface<DiraNote> {
 
     @Override
     public void save(DiraNote note) throws ExecutionException, InterruptedException {
-        Firestore firestore = FirestoreClient.getFirestore();
-        firestore.collection(collection_name).document(String.valueOf(note.getId())).set(note).get();
+        FirestoreClient.getFirestore().collection(collection_name)
+                .document(String.valueOf(note.getId())).set(note).get();
     }
 
     @Override
     public void delete(DiraNote note) throws ExecutionException, InterruptedException {
-        Firestore firestore = FirestoreClient.getFirestore();
-        firestore.collection(collection_name).document(String.valueOf(note.getId())).delete().get();
+        FirestoreClient.getFirestore().collection(collection_name)
+                .document(String.valueOf(note.getId())).delete().get();
     }
 
     public DiraNote findById(long id) throws ExecutionException, InterruptedException {
-        Firestore firestore = FirestoreClient.getFirestore();
-        Query query = firestore.collection(collection_name).whereEqualTo("id", id);
+        Query query = FirestoreClient.getFirestore().collection(collection_name).whereEqualTo("id", id);
         List<QueryDocumentSnapshot> foundDocs = query.get().get().getDocuments();
         QueryDocumentSnapshot snapshot = foundDocs.stream().findFirst().orElse(null);
         return snapshot == null ? null : snapshot.toObject(DiraNote.class);
     }
 
     public List<DiraNote> findInIdList(List<Long> idList) throws ExecutionException, InterruptedException {
-        Firestore firestore = FirestoreClient.getFirestore();
-        List<QueryDocumentSnapshot> foundDocs = firestore.collection(collection_name)
+        List<QueryDocumentSnapshot> foundDocs = FirestoreClient.getFirestore().collection(collection_name)
                 .whereIn("id", idList).get().get().getDocuments();
         List<DiraNote> res = new ArrayList<>();
         for (QueryDocumentSnapshot snapshot : foundDocs) {
@@ -50,9 +48,9 @@ public class NoteDao implements DaoInterface<DiraNote> {
 
     @Override
     public List<DiraNote> getAll() throws InterruptedException, ExecutionException {
-        Firestore firestore = FirestoreClient.getFirestore();
         List<DiraNote> res = new ArrayList<>();
-        Iterable<DocumentReference> refs = firestore.collection(collection_name).listDocuments();
+        Iterable<DocumentReference> refs = FirestoreClient.getFirestore()
+                .collection(collection_name).listDocuments();
         for (DocumentReference ref : refs) {
             DocumentSnapshot doc = ref.get().get();
             DiraNote item = doc.toObject(DiraNote.class);

@@ -18,12 +18,14 @@ public class UserDao implements DaoInterface<DiraUser> {
 
     @Override
     public void save(DiraUser user) throws ExecutionException, InterruptedException {
-        FirestoreClient.getFirestore().collection(collection_name).document(user.getTokenId()).set(user).get();
+        FirestoreClient.getFirestore().collection(collection_name)
+                .document(user.getTokenId()).set(user).get();
     }
 
     @Override
     public void delete(DiraUser user) throws ExecutionException, InterruptedException {
-        FirestoreClient.getFirestore().collection(collection_name).document(user.getTokenId()).delete().get();
+        FirestoreClient.getFirestore().collection(collection_name)
+                .document(user.getTokenId()).delete().get();
     }
 
     public List<DiraUser> getUsersByLeague(int league) throws ExecutionException, InterruptedException {
@@ -42,9 +44,9 @@ public class UserDao implements DaoInterface<DiraUser> {
         return snapshot == null ? null : snapshot.toObject(DiraUser.class);
     }
 
-    public List<DiraUser> getAllPaged(int offset, int size) throws ExecutionException, InterruptedException {
+    public List<DiraUser> getAllPaged(int limit) throws ExecutionException, InterruptedException {
         List<QueryDocumentSnapshot> docs = FirestoreClient.getFirestore().collection(collection_name)
-                .orderBy("score").offset(offset).limit(size).get().get().getDocuments();
+                .orderBy("score").limit(limit).get().get().getDocuments();
         List<DiraUser> res = new ArrayList<>();
         for (QueryDocumentSnapshot snapshot : docs) {
             DiraUser user = snapshot.toObject(DiraUser.class);

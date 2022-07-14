@@ -32,8 +32,8 @@ public class UserService {
         return dao.findById(id);
     }
 
-    public List<DiraUser> getAllPaged(int offset, int size) throws ExecutionException, InterruptedException {
-        return dao.getAllPaged(offset, size);
+    public List<DiraUser> getAllPaged(int limit) throws ExecutionException, InterruptedException {
+        return dao.getAllPaged(limit);
     }
 
     public List<DiraUser> getUsers() throws InterruptedException, ExecutionException {
