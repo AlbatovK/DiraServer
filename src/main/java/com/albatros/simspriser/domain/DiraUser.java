@@ -1,5 +1,6 @@
 package com.albatros.simspriser.domain;
 
+import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ApiModel(description = "POJO class that represents user in application")
 public class DiraUser {
 
     private String tokenId;

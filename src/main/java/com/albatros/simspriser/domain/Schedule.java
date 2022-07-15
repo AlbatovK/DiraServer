@@ -1,5 +1,6 @@
 package com.albatros.simspriser.domain;
 
+import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,8 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ApiModel(description = "Class that represents list of tasks of specific user " +
+        "and contains functionality for managing it")
 public class Schedule {
 
     private String ownerId;

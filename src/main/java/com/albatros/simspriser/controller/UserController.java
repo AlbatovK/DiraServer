@@ -70,11 +70,13 @@ public class UserController {
         }
     }
 
+    @ApiOperation(value = "Returns user with given tokenId")
     @GetMapping("/find")
     public DiraUser findById(@RequestParam("user_id") String user_id) throws ExecutionException, InterruptedException {
         return service.getUserById(user_id);
     }
 
+    @ApiOperation(value = "Returns sublist of all users with edge indexes present in request params")
     @GetMapping("/get")
     public List<DiraUser> getPaged(
             @RequestParam("from") int from,
@@ -84,6 +86,7 @@ public class UserController {
         return all.stream().skip(from).collect(Collectors.toList());
     }
 
+    @ApiOperation(value = "Returns list of all users stored in the database")
     @GetMapping("/get/all")
     public List<DiraUser> getAll() throws ExecutionException, InterruptedException {
         return service.getUsers();
