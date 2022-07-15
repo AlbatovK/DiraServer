@@ -25,7 +25,7 @@ public class SwaggerConfiguration {
     }
 
     public ApiInfo apiEndPointInfo() {
-        Contact contact = new Contact("Konstantin Albatov","","albatovkonstantin@yandex.ru");
+        Contact contact = new Contact("Konstantin Albatov","https://github.com/AlbatovK","albatovkonstantin@yandex.ru");
         return new ApiInfoBuilder()
                 .title("DiraServer")
                 .version("2.1.1")
