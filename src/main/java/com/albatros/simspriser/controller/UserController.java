@@ -1,7 +1,9 @@
-package com.albatros.simspriser.rest.controller;
+package com.albatros.simspriser.controller;
 
 import com.albatros.simspriser.domain.DiraUser;
 import com.albatros.simspriser.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,23 +15,28 @@ import java.util.stream.Collectors;
 
 @RequestMapping("/user")
 @RestController
+@Api(tags = {"UserController"}, description = "Provides set of CRUD operations with users " +
+        "as well as manages their meta-data and in-between statistics")
 @RequiredArgsConstructor
 public class UserController {
 
     @Autowired
     private final UserService service;
 
+    @ApiOperation(value = "Saves user to the database")
     @PostMapping(value = "/create", consumes = "application/json", produces = "application/json")
     public DiraUser createUser(@RequestBody DiraUser user) throws ExecutionException, InterruptedException {
         service.saveUser(user);
         return user;
     }
 
-    @GetMapping(value = "/league/get/all")
+    @ApiOperation(value = "Returns a list of users present in a league with requested number")
+    @GetMapping(value = "/league/get")
     public List<DiraUser> getUsersByLeague(@RequestParam("league") int league) throws ExecutionException, InterruptedException {
         return service.getUsersByLeague(league);
     }
 
+    @ApiOperation(value = "Provides implementation for users leagues transition based on their stats")
     @GetMapping(value = "/refresh/leagues")
     public void refreshLeagues() throws ExecutionException, InterruptedException {
 
@@ -45,6 +52,7 @@ public class UserController {
         }
     }
 
+    @ApiOperation(value = "Clears users daily meta-data")
     @GetMapping(value = "/refresh/day")
     public void refreshDay() throws ExecutionException, InterruptedException {
         List<DiraUser> users = service.getUsers();
@@ -53,6 +61,7 @@ public class UserController {
         }
     }
 
+    @ApiOperation(value = "Clears users weekly meta-data")
     @GetMapping(value = "/refresh/week")
     public void refreshWeek() throws ExecutionException, InterruptedException {
         List<DiraUser> users = service.getUsers();
@@ -77,6 +86,6 @@ public class UserController {
 
     @GetMapping("/get/all")
     public List<DiraUser> getAll() throws ExecutionException, InterruptedException {
-        return service.getAllPaged(100);
+        return service.getUsers();
     }
 }
