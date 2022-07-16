@@ -28,7 +28,6 @@ public class NoteController {
     @Autowired
     private final ScheduleService scheduleService;
 
-
     @ApiOperation(value = "Adds all notes which ids are present in request body " +
                     "to schedule of user with requested tokenId")
     @PostMapping(value = "/add", consumes = "application/json", produces = "application/json")
