@@ -1,8 +1,8 @@
 package com.albatros.simspriser.controller;
 
-import com.albatros.simspriser.domain.DiraNote;
-import com.albatros.simspriser.domain.NoteIdsList;
-import com.albatros.simspriser.domain.Schedule;
+import com.albatros.simspriser.domain.pojo.DiraNote;
+import com.albatros.simspriser.domain.pojo.NoteIdsList;
+import com.albatros.simspriser.domain.pojo.Schedule;
 import com.albatros.simspriser.service.NoteService;
 import com.albatros.simspriser.service.ScheduleService;
 import io.swagger.annotations.Api;

@@ -1,6 +1,7 @@
 package com.albatros.simspriser.controller;
 
-import com.albatros.simspriser.domain.DiraUser;
+import com.albatros.simspriser.domain.hashing.HashingManager;
+import com.albatros.simspriser.domain.pojo.DiraUser;
 import com.albatros.simspriser.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
@@ -36,9 +38,11 @@ public class UserController {
         return service.getUsersByLeague(league);
     }
 
-    @ApiOperation(value = "Provides implementation for users leagues transition based on their stats")
+    @ApiOperation(value = "Provides implementation for users leagues transition based on their stats. Requires api-key header")
     @GetMapping(value = "/refresh/leagues")
-    public void refreshLeagues() throws ExecutionException, InterruptedException {
+    public void refreshLeagues(@RequestHeader("api-key") String key) throws ExecutionException, InterruptedException, NoSuchAlgorithmException, IllegalAccessException {
+        if (!HashingManager.getHash(key).equalsIgnoreCase(HashingManager.hash))
+            throw new IllegalAccessException("No Api key provided");
 
         Consumer<DiraUser> leagueIncreaseConsumer = u -> {
             u.setLeague(u.getLeague() + 1);
@@ -52,21 +56,29 @@ public class UserController {
         }
     }
 
-    @ApiOperation(value = "Clears users daily meta-data")
+    @ApiOperation(value = "Clears users daily meta-data. Requires api-key header")
     @GetMapping(value = "/refresh/day")
-    public void refreshDay() throws ExecutionException, InterruptedException {
+    public void refreshDay(@RequestHeader("api-key") String key) throws ExecutionException, InterruptedException, NoSuchAlgorithmException, IllegalAccessException {
+        if (!HashingManager.getHash(key).equalsIgnoreCase(HashingManager.hash))
+            throw new IllegalAccessException("No Api key provided");
+
         List<DiraUser> users = service.getUsers();
         for (DiraUser user : users) {
-            service.clearUserDayScore(user);
+            if (user.getScoreOfDay() > 0)
+                service.clearUserDayScore(user);
         }
     }
 
-    @ApiOperation(value = "Clears users weekly meta-data")
+    @ApiOperation(value = "Clears users weekly meta-data. Requires api-key header")
     @GetMapping(value = "/refresh/week")
-    public void refreshWeek() throws ExecutionException, InterruptedException {
+    public void refreshWeek(@RequestHeader("api-key") String key) throws ExecutionException, InterruptedException, NoSuchAlgorithmException, IllegalAccessException {
+        if (!HashingManager.getHash(key).equalsIgnoreCase(HashingManager.hash))
+            throw new IllegalAccessException("No Api key provided");
+
         List<DiraUser> users = service.getUsers();
         for (DiraUser user : users) {
-            service.clearUserWeekScore(user);
+            if (user.getScoreOfWeek() > 0)
+                service.clearUserWeekScore(user);
         }
     }
 

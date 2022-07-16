@@ -1,6 +1,7 @@
 package com.albatros.simspriser.controller;
 
-import com.albatros.simspriser.domain.Schedule;
+import com.albatros.simspriser.domain.hashing.HashingManager;
+import com.albatros.simspriser.domain.pojo.Schedule;
 import com.albatros.simspriser.service.ScheduleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -32,13 +34,18 @@ public class ScheduleController {
         return scheduleService.findScheduleByOwnerId(user_id);
     }
 
-    @ApiOperation(value = "Clears meta-data of all schedules")
+    @ApiOperation(value = "Clears meta-data of all schedules. Requires api-key header")
     @GetMapping(value = "/refresh")
-    public void refresh() throws ExecutionException, InterruptedException {
+    public void refresh(@RequestHeader("api-key") String key) throws ExecutionException, InterruptedException, NoSuchAlgorithmException, IllegalAccessException {
+        if (!HashingManager.getHash(key).equalsIgnoreCase(HashingManager.hash))
+            throw new IllegalAccessException("No Api key provided");
+
         List<Schedule> schedules = scheduleService.getSchedules();
         for (Schedule schedule : schedules) {
-            schedule.clearTasks();
-            scheduleService.updateSchedule(schedule);
+            if (!schedule.getTasks().isEmpty()) {
+                schedule.clearTasks();
+                scheduleService.updateSchedule(schedule);
+            }
         }
     }
 }

@@ -1,6 +1,6 @@
 package com.albatros.simspriser.dao;
 
-import com.albatros.simspriser.domain.DiraUser;
+import com.albatros.simspriser.domain.pojo.DiraUser;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.stereotype.Component;

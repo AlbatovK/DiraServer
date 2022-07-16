@@ -1,7 +1,7 @@
 package com.albatros.simspriser.service;
 
 import com.albatros.simspriser.dao.ScheduleDao;
-import com.albatros.simspriser.domain.Schedule;
+import com.albatros.simspriser.domain.pojo.Schedule;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

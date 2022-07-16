@@ -1,6 +1,6 @@
 package com.albatros.simspriser.dao;
 
-import com.albatros.simspriser.domain.Schedule;
+import com.albatros.simspriser.domain.pojo.Schedule;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.stereotype.Component;

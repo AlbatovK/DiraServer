@@ -1,7 +1,7 @@
 package com.albatros.simspriser.service;
 
 import com.albatros.simspriser.dao.NoteDao;
-import com.albatros.simspriser.domain.DiraNote;
+import com.albatros.simspriser.domain.pojo.DiraNote;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;

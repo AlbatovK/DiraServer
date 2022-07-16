@@ -1,4 +1,4 @@
-package com.albatros.simspriser.domain;
+package com.albatros.simspriser.domain.pojo;
 
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;

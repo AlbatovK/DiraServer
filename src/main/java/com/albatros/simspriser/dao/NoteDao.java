@@ -1,6 +1,6 @@
 package com.albatros.simspriser.dao;
 
-import com.albatros.simspriser.domain.DiraNote;
+import com.albatros.simspriser.domain.pojo.DiraNote;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Query;
