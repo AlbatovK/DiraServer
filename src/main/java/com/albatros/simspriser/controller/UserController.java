@@ -38,22 +38,30 @@ public class UserController {
         return service.getUsersByLeague(league);
     }
 
-    @ApiOperation(value = "Provides implementation for users leagues transition based on their stats. Requires api-key header")
+    @ApiOperation(value = "Provides implementation for users leagues transition based on their stats. Returns result data as string. Requires api-key header")
     @GetMapping(value = "/refresh/leagues")
-    public void refreshLeagues(@RequestHeader("api-key") String key) throws ExecutionException, InterruptedException, NoSuchAlgorithmException, IllegalAccessException {
+    public String refreshLeagues(@RequestHeader("api-key") String key) throws ExecutionException, InterruptedException, NoSuchAlgorithmException, IllegalAccessException {
         if (!HashingManager.getHash(key).equalsIgnoreCase(HashingManager.hash))
             throw new IllegalAccessException("No Api key provided");
 
+        final StringBuilder builder = new StringBuilder();
+
         Consumer<DiraUser> leagueIncreaseConsumer = u -> {
             u.setLeague(u.getLeague() + 1);
+            builder.append(u.getNickname()).append('\n');
             try { service.saveUser(u); } catch (ExecutionException | InterruptedException ignored) { }
         };
 
         int i = 4;
         while (i > 0) {
-            service.getUsersByLeague(i).stream().limit(1).forEach(leagueIncreaseConsumer);
+            builder.append(i).append('\n');
+            List<DiraUser> leagueUsers = service.getUsersByLeague(i);
+            int maxScore = leagueUsers.stream().mapToInt(DiraUser::getScoreOfWeek).max().orElse(-1);
+            leagueUsers.stream().filter(u -> u.getScoreOfWeek() == maxScore).forEach(leagueIncreaseConsumer);
             i--;
         }
+
+        return builder.toString();
     }
 
     @ApiOperation(value = "Clears users daily meta-data. Requires api-key header")
