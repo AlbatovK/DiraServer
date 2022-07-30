@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
@@ -30,6 +31,15 @@ public class UserController {
     public DiraUser createUser(@RequestBody DiraUser user) throws ExecutionException, InterruptedException {
         service.saveUser(user);
         return user;
+    }
+
+    @Value("${app-info.version}")
+    private String version;
+    
+    @ApiOperation(value = "Get current API version as string")
+    @GetMapping(value = "/api/v/get")
+    public String getApiVersion() {
+        return version;
     }
 
     @ApiOperation(value = "Returns a list of users present in a league with requested number")
