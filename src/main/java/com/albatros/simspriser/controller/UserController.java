@@ -15,10 +15,10 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-@RequestMapping("/user")
-@RestController
 @Api(tags = {"UserController"}, description = "Provides set of CRUD operations with users " +
         "as well as manages their meta-data and in-between statistics")
+@RequestMapping("/user")
+@RestController
 @RequiredArgsConstructor
 public class UserController {
 
