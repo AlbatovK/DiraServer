@@ -38,6 +38,19 @@ public class UserDao implements DaoInterface<DiraUser> {
                 .document(user.getTokenId()).delete().get();
     }
 
+    public List<DiraUser> getUsersByNicknamePrefix(String prefix) throws ExecutionException, InterruptedException {
+        List<QueryDocumentSnapshot> snapshots = FirestoreClient.getFirestore().collection(collection_name)
+                .whereGreaterThanOrEqualTo("nickname", prefix)
+                .whereLessThanOrEqualTo("nickname", prefix + '\uF7FF')
+                .get().get().getDocuments();
+        List<DiraUser> res = new ArrayList<>();
+        for (QueryDocumentSnapshot snapshot : snapshots) {
+            DiraUser user = snapshot.toObject(DiraUser.class);
+            res.add(user);
+        }
+        return res;
+    }
+
     public List<DiraUser> getUsersByLeague(int league) throws ExecutionException, InterruptedException {
         return FirestoreClient.getFirestore().collection(collection_name).whereEqualTo("league", league)
                 .get().get().getDocuments().stream()

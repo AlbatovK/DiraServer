@@ -40,6 +40,10 @@ public class UserService {
         dao.clearUserDayScore(user);
     }
 
+    public List<DiraUser> getUsersByNicknamePrefix(String prefix) throws ExecutionException, InterruptedException {
+        return dao.getUsersByNicknamePrefix(prefix);
+    }
+
     public void clearUserWeekScore(DiraUser user) throws ExecutionException, InterruptedException {
         dao.clearUserWeekScore(user);
     }

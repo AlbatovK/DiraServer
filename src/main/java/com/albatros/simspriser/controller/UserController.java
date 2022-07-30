@@ -38,6 +38,12 @@ public class UserController {
         return service.getUsersByLeague(league);
     }
 
+    @ApiOperation(value = "Returns a list of users with given name prefix")
+    @GetMapping(value = "/get/name")
+    public List<DiraUser> getUsersByNicknamePrefix(@RequestParam("prefix") String prefix) throws ExecutionException, InterruptedException {
+        return service.getUsersByNicknamePrefix(prefix);
+    }
+
     @ApiOperation(value = "Provides implementation for users leagues transition based on their stats. Returns result data as string. Requires api-key header")
     @GetMapping(value = "/refresh/leagues")
     public String refreshLeagues(@RequestHeader("api-key") String key) throws ExecutionException, InterruptedException, NoSuchAlgorithmException, IllegalAccessException {
