@@ -25,5 +25,5 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: Report
-        path: ${{ github.workspace }}/target/site/pmd.xml
+        path: ${{ github.workspace }}
     
