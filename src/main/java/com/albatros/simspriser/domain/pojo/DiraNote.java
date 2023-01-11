@@ -15,4 +15,5 @@ public class DiraNote {
     private int score;
     private boolean finished;
     private long id;
+    private long time;
 }
